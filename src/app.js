@@ -7,7 +7,7 @@ const timeout = require("connect-timeout");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(timeout("20s"));
+app.use(timeout("300s"));
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
