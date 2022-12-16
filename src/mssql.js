@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
     },
   };
 
-  var sql = dbConfig.native ? require("mssql") : require("mssql/msnodesqlv8");
+  var sql = dbConfig.native ? require("mssql/msnodesqlv8") : require("mssql");
 
   if (dbConfig.native) {
     sqlConfig.options.trustedConnection = true;
