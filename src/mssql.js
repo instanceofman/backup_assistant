@@ -85,11 +85,14 @@ module.exports = async (req, res) => {
       file,
     });
 
+    fs.unlinkSync(exportTo);
+    fs.unlinkSync(zipTo);
+
     res.send({ success: true, path: exportTo });
   } catch (err) {
+    fs.unlinkSync(exportTo);
+    fs.unlinkSync(zipTo);
+
     res.send({ success: false, error: err.message });
   }
-
-  fs.unlinkSync(exportTo);
-  fs.unlinkSync(zipTo);
 };
