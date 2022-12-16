@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const http = require("http");
 const server = http.createServer(app);
-const timeout = (timeout = require("connect-timeout"));
+const timeout = require("connect-timeout");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
