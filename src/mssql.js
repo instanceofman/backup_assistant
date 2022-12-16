@@ -79,4 +79,7 @@ module.exports = async (req, res) => {
   } catch (err) {
     res.send({ success: false, error: err.message });
   }
+
+  fs.unlinkSync(exportTo);
+  fs.unlinkSync(zipTo);
 };
