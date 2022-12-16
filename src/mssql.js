@@ -1,4 +1,3 @@
-const sql = require("mssql");
 const AdmZip = require("adm-zip");
 const fs = require("fs");
 const Spaces = require("do-spaces").default;
@@ -21,21 +20,32 @@ module.exports = async (req, res) => {
   const dbExportDir = req.body.export_dir;
   const uploadPath = req.body.upload_path;
 
+  dbConfig.port = dbConfig.hasOwnProperty("port") ? dbConfig.port : 1433;
+  dbConfig.native = dbConfig.hasOwnProperty("native") ? dbConfig.native : false;
+
   const sqlConfig = {
     user: dbConfig.username,
     password: dbConfig.password,
     database: dbConfig.database,
     server: dbConfig.server,
-    pool: {
-      max: 10,
-      min: 0,
-      idleTimeoutMillis: 30000,
-    },
+    port: dbConfig.port,
+    // pool: {
+    //   max: 10,
+    //   min: 0,
+    //   idleTimeoutMillis: 30000,
+    // },
     options: {
       encrypt: false,
       trustServerCertificate: false,
     },
   };
+
+  var sql = dbConfig.native ? require("mssql") : require("mssql/msnodesqlv8");
+
+  if (dbConfig.native) {
+    sqlConfig.options.trustedConnection = true;
+    sqlConfig.driver = "msnodesqlv8";
+  }
 
   const spaces = new Spaces({
     endpoint: s3Config.endpoint,
