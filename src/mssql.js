@@ -23,13 +23,16 @@ module.exports = async ({ database, drive, exportTo, uploadTo }) => {
 
     result = { success: true, file: uploadFile };
   } catch (error) {
+    console.log('Process', error);
     result = { success: false, error };
   }
 
   try {
     fs.unlinkSync(backupFile);
     fs.unlinkSync(zipFile);
-  } catch (e) {}
+  } catch (e) {
+    console.log('Cleanup', e);
+  }
 
   return result;
 };
