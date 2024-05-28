@@ -29,7 +29,7 @@ app.post("/backup/mssql", async (req, res) => {
     if (result.success) {
       res.send(result);
     } else {
-      res.send(false, result.error.message);
+      res.send({success: false, error: result.error.message});
     }
   } catch (e) {
     res.send({ success: false, error: e.message });
