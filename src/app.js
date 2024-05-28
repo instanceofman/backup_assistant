@@ -15,9 +15,9 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/backup/mssql", (req, res) => {
+app.post("/backup/mssql", async (req, res) => {
   try {
-    const result = mssqlHandler(
+    const result = await mssqlHandler(
       validate(req.body)
         .requires("database")
         .requires("drive")
