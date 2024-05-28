@@ -14,8 +14,9 @@ module.exports = async ({ database, drive, exportTo, uploadTo }) => {
 
     const fileName = output.backupFile;
     const zipFileName = fileName + ".zip";
+    zipFile = output.backupFile + ".zip";
 
-    zipFile = await createZip(backupFile, zipFile);
+    await createZip(backupFile, zipFile);
 
     const uploadFile = `${uploadTo}${zipFileName}`;
     await upload(fs.readFileSync(zipFile), uploadFile, drive);
