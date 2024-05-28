@@ -19,10 +19,10 @@ app.post("/backup/mssql", (req, res) => {
   try {
     const result = mssqlHandler(
       validate(req.body)
-        .requires("db_config")
-        .requires("s3_config")
-        .requires("export_dir")
-        .requires("upload_path")
+        .requires("database")
+        .requires("drive")
+        .requires("exportTo")
+        .requires("uploadTo")
         .get()
     );
 
