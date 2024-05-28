@@ -9,7 +9,7 @@ module.exports = async ({ database, drive, exportTo, uploadTo }) => {
   let zipFile = null;
 
   try {
-    backupFile = exportDb(exportTo, database);
+    backupFile = await exportDb(exportTo, database);
     const uploadFile = `${uploadTo}${zipFile}`;
 
     zipFile = await createZip(backupFile, backupFile + ".zip");

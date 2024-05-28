@@ -26,7 +26,11 @@ app.post("/backup/mssql", (req, res) => {
         .get()
     );
 
-    res.send(result);
+    if (result.success) {
+      res.send(result);
+    } else {
+      res.send(false, result.error.message);
+    }
   } catch (e) {
     res.send({ success: false, error: e.message });
   }
