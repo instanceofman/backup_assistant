@@ -1,4 +1,4 @@
-module.exports = async (exportDir, dbConfig) => {
+module.exports = async (exportTo, options) => {
   const date = new Date()
     .toISOString()
     .replaceAll("T", "_")
@@ -7,20 +7,20 @@ module.exports = async (exportDir, dbConfig) => {
     .split(".")
     .shift();
 
-  const fileName = `${dbConfig.database}_${date}.bak`;
-  const exportTo = `${exportDir}${fileName}`;
-  const query = `BACKUP DATABASE ${dbConfig.database} TO DISK = '${exportTo}'`;
-  const sql = dbConfig.native ? require("mssql/msnodesqlv8") : require("mssql");
+  const fileName = `${options.database}_${date}.bak`;
+  const backupFile = `${exportTo}${fileName}`;
+  const query = `BACKUP DATABASE ${options.database} TO DISK = '${backupFile}'`;
+  const sql = options.native ? require("mssql/msnodesqlv8") : require("mssql");
 
-  dbConfig.port = dbConfig.hasOwnProperty("port") ? dbConfig.port : 1433;
-  dbConfig.native = dbConfig.hasOwnProperty("native") ? dbConfig.native : false;
+  options.port = options.hasOwnProperty("port") ? options.port : 1433;
+  options.native = options.hasOwnProperty("native") ? options.native : false;
 
   const sqlConfig = {
-    user: dbConfig.username,
-    password: dbConfig.password,
-    database: dbConfig.database,
-    server: dbConfig.server,
-    port: dbConfig.port,
+    user: options.username,
+    password: options.password,
+    database: options.database,
+    server: options.server,
+    port: options.port,
     connectionTimeout: 360000,
     requestTimeout: 360000,
     pool: {
@@ -35,7 +35,7 @@ module.exports = async (exportDir, dbConfig) => {
     },
   };
 
-  if (dbConfig.native) {
+  if (options.native) {
     sqlConfig.options.trustedConnection = true;
     sqlConfig.driver = "msnodesqlv8";
   }
@@ -43,5 +43,8 @@ module.exports = async (exportDir, dbConfig) => {
   await sql.connect(sqlConfig);
   await sql.query(query);
 
-  return exportTo;
+  return {
+    backupFile,
+    fileName
+  };
 };

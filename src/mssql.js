@@ -9,10 +9,15 @@ module.exports = async ({ database, drive, exportTo, uploadTo }) => {
   let zipFile = null;
 
   try {
-    backupFile = await exportDb(exportTo, database);
-    zipFile = await createZip(backupFile, backupFile + ".zip");
+    const output = await exportDb(exportTo, database);
+    backupFile = output.backupFile;
 
-    const uploadFile = `${uploadTo}${zipFile}`;
+    const fileName = output.backupFile;
+    const zipFileName = fileName + ".zip";
+
+    zipFile = await createZip(backupFile, zipFile);
+
+    const uploadFile = `${uploadTo}${zipFileName}`;
     await upload(fs.readFileSync(zipFile), uploadFile, drive);
 
     result = { success: true, file: uploadFile };
